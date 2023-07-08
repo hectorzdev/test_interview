@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'UserController@index');
 Route::get('/ssm', 'UserController@ssm');
+Route::get('/area', 'UserController@area');
 
 Route::post('/user' , 'UserController@store');
 Route::post('/update-point' , 'UserController@updatePoint');

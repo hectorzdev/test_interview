@@ -14,6 +14,47 @@ class UserController extends Controller
         $users  = User::all();
         return view('welcome' , ['users' => $users]);
     }
+    
+    public function area(){
+   
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=%E0%B8%AA%E0%B8%A1%E0%B8%B8%E0%B8%97%E0%B8%A3%E0%B8%AA%E0%B8%87%E0%B8%84%E0%B8%A3%E0%B8%B2%E0%B8%A1&destinations=%E0%B8%AA%E0%B8%B8%E0%B8%A1%E0%B8%97%E0%B8%A3%E0%B8%9B%E0%B8%A3%E0%B8%B2%E0%B8%81%E0%B8%B2%E0%B8%A3%7C%E0%B8%9A%E0%B8%B2%E0%B8%87%E0%B8%81%E0%B8%B0%E0%B8%9B%E0%B8%B4%7C%E0%B8%AD%E0%B8%A2%E0%B8%B8%E0%B8%98%E0%B8%A2%E0%B8%B2%7C%E0%B8%A5%E0%B8%B2%E0%B8%94%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B8%9A%E0%B8%B1%E0%B8%87%7C%E0%B8%99%E0%B8%84%E0%B8%A3%E0%B8%9B%E0%B8%90%E0%B8%A1%7C%E0%B9%80%E0%B8%9E%E0%B8%8A%E0%B8%A3%E0%B8%9A%E0%B8%B8%E0%B8%A3%E0%B8%B5&key=AIzaSyCvfowu3sliTOFVf93XLgHO86qB1wG4zOc',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        $response = json_decode($response);
+        $results = $response->rows[0]->elements;
+
+        $destinations = $response->destination_addresses;
+
+      
+        usort($results, function ($a, $b) {
+            return $a->distance->value - $b->distance->value;
+        });
+    
+        $sortedDestinations = [];
+        foreach ($results as $result) {
+            $sortedDestinations[] = $destinations[array_search($result, $results)] . '( '.$result->distance->text.' )';
+        }
+    
+  
+        // แสดงลำดับจังหวัดทั้งหมด
+        foreach ($sortedDestinations as $destination) {
+            echo $destination . "<br>";
+        }
+        return view('area' , ['responses' => $response]);
+    }
 
     public function ssm(){
 
