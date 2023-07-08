@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'UserController@index');
+Route::get('/ssm', 'UserController@ssm');
 
 Route::post('/user' , 'UserController@store');
 Route::post('/update-point' , 'UserController@updatePoint');
 Route::post('/delete-user' , 'UserController@deleteUser');
+Route::post('/get-api' , 'UserController@getAPI');

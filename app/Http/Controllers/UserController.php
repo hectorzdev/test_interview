@@ -15,6 +15,31 @@ class UserController extends Controller
         return view('welcome' , ['users' => $users]);
     }
 
+    public function ssm(){
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => 'https://ssm-th.com/api/v2',
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => '',
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => 'POST',
+          CURLOPT_POSTFIELDS => array('key' => 'ab2c31fa20bb20ecc5260c05a3b1d305','action' => 'services'),
+        ));
+        
+        $response = curl_exec($curl);
+        
+        curl_close($curl);
+
+        $services = json_decode($response);
+        return view('ssm' , ['services' => $services]);
+    }
+
+
     public function store(Request $request){
         try {
             
@@ -31,6 +56,7 @@ class UserController extends Controller
             $user = User::find($createUser->id);
             $export['success'] = true;
             $export['user'] = $user;
+            $export['password'] = $user->password;
         } catch (Exception $th) {
             $export['success'] = false;
             $export['msg'] = $th->getMessage();
@@ -67,6 +93,39 @@ class UserController extends Controller
             }
 
             $export['success'] = true;
+        } catch (Exception $th) {
+            $export['success'] = false;
+            $export['msg'] = $th->getMessage();
+        }
+
+        return response()->json($export);
+    }
+    
+    public function getAPI(Request $request){
+        try {
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => 'https://ssm-th.com/api/v2',
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => '',
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => true,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => 'POST',
+              CURLOPT_POSTFIELDS => array('key' => 'ab2c31fa20bb20ecc5260c05a3b1d305','action' => 'services'),
+            ));
+            
+            $response = curl_exec($curl);
+            
+            curl_close($curl);
+
+            // $data = json_encode($response);
+
+            $export['success'] = true;
+            $export['api_data'] = $response;
         } catch (Exception $th) {
             $export['success'] = false;
             $export['msg'] = $th->getMessage();

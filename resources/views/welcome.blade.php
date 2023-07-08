@@ -62,7 +62,7 @@
                 document.getElementById('submitForm').reset();
                 const html = `<tr id="user_`+data.user.id+`">
                                 <th>`+data.user.username+`</th>
-                                <th>`+data.user.password+`</th>
+                                <th>`+data.password+`</th>
                                 <th>`+data.user.name+`</th>
                                 <th><button type="button" onclick="actionPoint( `+data.user.id+`, 'r')">-</button>
                                     `+data.user.point+`
@@ -112,6 +112,18 @@
         }
     }
 
+    $(document).ready(function(){
+        fetchAPI()
+    })
+
+    function fetchAPI(){
+        $.post(`{{url('get-api')}}` , {_token:`{{csrf_token()}}`} , function(data){
+          
+        })
+        // $.post('https://ssm-th.com/api/v2' , {key:"ab2c31fa20bb20ecc5260c05a3b1d305"} , function(data){
+        //     console.log(data)
+        // })
+    }
 
 </script>
 </body>
